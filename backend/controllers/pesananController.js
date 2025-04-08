@@ -1,52 +1,44 @@
-const Pesanan = require('../models/pesanan');
+const Pesanan = require("./models/pesanan");
 
-// CREATE
+// Create a new pesanan
 exports.createPesanan = async (req, res) => {
   try {
-    const pesanan = await Pesanan.create(req.body);
-    res.status(201).json(pesanan);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    const newPesanan = new Pesanan(req.body);
+    const savedPesanan = await newPesanan.save();
+    res.status(201).json(savedPesanan);
+  } catch (error) {
+    res.status(500).json({ message: "Error creating pesanan", error });
   }
 };
 
-// READ ALL
-exports.getAllPesanan = async (req, res) => {
+// Get all pesanan
+exports.getPesanan = async (req, res) => {
   try {
-    const list = await Pesanan.find().populate("produk_id");
-    res.json(list);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const pesananList = await Pesanan.find().sort({ createdAt: -1 });
+    res.status(200).json(pesananList);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching pesanan", error });
   }
 };
 
-// READ BY ID
-exports.getPesananById = async (req, res) => {
-  try {
-    const pesanan = await Pesanan.findById(req.params.id).populate("produk_id");
-    if (!pesanan) return res.status(404).json({ message: "Pesanan tidak ditemukan" });
-    res.json(pesanan);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// UPDATE
+// Update a pesanan
 exports.updatePesanan = async (req, res) => {
   try {
-    const updated = await Pesanan.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updated);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    const { id } = req.params;
+    const updatedPesanan = await Pesanan.findByIdAndUpdate(id, req.body, { new: true });
+    res.status(200).json(updatedPesanan);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating pesanan", error });
   }
 };
 
-// DELETE
+// Delete a pesanan
 exports.deletePesanan = async (req, res) => {
   try {
-    await Pesanan.findByIdAndDelete(req.params.id);
-    res.json({ message: "Pesanan dihapus" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const { id } = req.params;
+    await Pesanan.findByIdAndDelete(id);
+    res.status(200).json({ message: "Pesanan deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting pesanan", error });
   }
 };
