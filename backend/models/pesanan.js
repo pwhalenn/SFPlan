@@ -1,24 +1,44 @@
 // models/pesanan.js
 const mongoose = require("mongoose");
 
-const Pesanan = new mongoose.Schema({
-    nama_pelanggan: DataTypes.STRING,
-    kuantitas: DataTypes.INTEGER,
-    tanggal_pesanan: DataTypes.DATEONLY,
-    waktu_siap: DataTypes.TIME,
-    waktu_antar: DataTypes.TIME,
-    catatan: DataTypes.TEXT,
-    tipe_kemasan: DataTypes.STRING,
-    butuh_kartu_nama: DataTypes.BOOLEAN,
-    status: {
-        type: DataTypes.ENUM("baru", "diproses", "selesai", "batal"),
-        defaultValue: "baru"
-    }
-});
-  
-Pesanan.associate = (models) => {
-    Pesanan.belongsTo(models.Produk, { foreignKey: "produk_id" });
-    Pesanan.hasOne(models.JadwalProduksi, { foreignKey: "sumber_dari_pesanan_id" });
-};
-  
-module.exports = mongoose.model("Pesanan", pesananSchema);
+const pesananSchema = new mongoose.Schema({
+  nama_pelanggan: {
+    type: String,
+  },
+  produk: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Produk',
+    required: true,
+  },
+  kuantitas: {
+    type: Number,
+    required: true,
+  },
+  tanggal_pesanan: {
+    type: Date,
+    default: Date.now,
+  },
+  waktu_siap: {
+    type: String,
+  },
+  waktu_antar: {
+    type: String,
+  },
+  catatan: {
+    type: String,
+  },
+  tipe_kemasan: {
+    type: String,
+  },
+  butuh_kartu_nama: {
+    type: Boolean,
+    default: false,
+  },
+  status: {
+    type: String,
+    enum: ['baru', 'diproses', 'selesai', 'batal'],
+    default: 'baru',
+  }
+}, { timestamps: true });
+
+module.exports = mongoose.model('Pesanan', pesananSchema);
