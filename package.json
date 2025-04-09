@@ -1,0 +1,26 @@
+{
+  "name": "sfplan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pwhalenn/SFPlan.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pwhalenn/SFPlan/issues"
+  },
+  "homepage": "https://github.com/pwhalenn/SFPlan#readme",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
