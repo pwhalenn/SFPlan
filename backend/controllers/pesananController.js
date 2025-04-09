@@ -1,4 +1,4 @@
-const Pesanan = require("./models/pesanan");
+const Pesanan = require("../models/pesanan");
 
 // Create a new pesanan
 exports.createPesanan = async (req, res) => {
