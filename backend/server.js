@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const path = require('path'); 
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
@@ -13,6 +14,12 @@ const jadwalProduksiRoute = require("./routes/jadwalProduksiRoute");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Set the view engine to EJS
+app.set('view engine', 'ejs');
+
+// Set the directory where your view files are located
+app.set('views', path.join(__dirname, '..', 'frontend', 'views'));
 
 // Middleware
 app.use(cors());
