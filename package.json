@@ -21,6 +21,9 @@
   },
   "homepage": "https://github.com/pwhalenn/SFPlan#readme",
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "bcryptjs": "^3.0.2",
+    "concurrently": "^9.1.2",
+    "connect-mongo": "^5.1.0",
+    "express-session": "^1.18.1"
   }
 }

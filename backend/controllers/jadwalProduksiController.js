@@ -1,4 +1,4 @@
-const JadwalProduksi = require("../models/jadwalProduksi");
+const JadwalProduksi = require("../models/jadwalProduksiModel");
 
 // Create a new jadwal produksi
 exports.createJadwalProduksi = async (req, res) => {

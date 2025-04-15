@@ -3,7 +3,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 
+const authRoute = require("./routes/authRoute");
 const pesananRoute = require("./routes/pesananRoute");
 const produkRoute = require("./routes/produkRoute");
 const jadwalProduksiRoute = require("./routes/jadwalProduksiRoute");
@@ -23,11 +26,26 @@ mongoose
   })
   .then(() => console.log("MongoDB connected successfully"))
   .catch((err) => console.error("MongoDB connection error:", err));
+  
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+    cookie: { secure: false }, // true in production with HTTPS
+  })
+);  
 
 // Routes
-app.use("/api/pesanan", pesananRoute);
-app.use("/api/produk", produkRoute);
-app.use("/api/jadwal-produksi", jadwalProduksiRoute);
+app.use("/auth", authRoute);
+app.use("/pesanan", pesananRoute);
+app.use("/produk", produkRoute);
+app.use("/jadwal-produksi", jadwalProduksiRoute);
+
+app.get("/", (req, res) => {
+  res.redirect("/auth/login");
+});
 
 // Start Server
 app.listen(PORT, () => {
