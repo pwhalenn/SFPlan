@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getProduk = async () => {
   try {
-    const response = await axios.get("/api/produk");
+    const response = await axios.get("/produk");
     return response.data;
   } catch (error) {
     console.error("Error fetching produk:", error);
@@ -12,7 +12,7 @@ export const getProduk = async () => {
 
 export const createProduk = async (produk) => {
   try {
-    const response = await axios.post("/api/produk", produk);
+    const response = await axios.post("/produk", produk);
     return response.data;
   } catch (error) {
     console.error("Error creating produk:", error);
@@ -22,7 +22,7 @@ export const createProduk = async (produk) => {
 
 export const updateProduk = async (id, produk) => {
   try {
-    const response = await axios.put(`/api/produk/${id}`, produk);
+    const response = await axios.put(`/produk/${id}`, produk);
     return response.data;
   } catch (error) {
     console.error("Error updating produk:", error);
@@ -32,7 +32,7 @@ export const updateProduk = async (id, produk) => {
 
 export const deleteProduk = async (id) => {
   try {
-    await axios.delete(`/api/produk/${id}`);
+    await axios.delete(`/produk/${id}`);
   } catch (error) {
     console.error("Error deleting produk:", error);
     throw error;

@@ -1,6 +1,4 @@
-// frontend/src/components/produkForm.js
-import React, { useEffect, useState } from "react";
-import { Box, FormControl, FormLabel, Input, Textarea, Button, VStack } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 
 const ProdukForm = ({ onSubmit, initialProduk = null }) => {
   const [nama, setNama] = useState("");
@@ -30,25 +28,39 @@ const ProdukForm = ({ onSubmit, initialProduk = null }) => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} p={4} borderWidth={1} borderRadius="md">
-      <VStack spacing={4}>
-        <FormControl isRequired>
-          <FormLabel>Nama Produk</FormLabel>
-          <Input value={nama} onChange={(e) => setNama(e.target.value)} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Resep</FormLabel>
-          <Textarea value={resep} onChange={(e) => setResep(e.target.value)} rows={3} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Cara Buat</FormLabel>
-          <Textarea value={caraBuat} onChange={(e) => setCaraBuat(e.target.value)} rows={3} />
-        </FormControl>
-        <Button colorScheme="green" type="submit" width="full">
-          {initialProduk ? "Update Produk" : "Tambah Produk"}
-        </Button>
-      </VStack>
-    </Box>
+    <form onSubmit={handleSubmit} className="p-4 border rounded">
+      <div className="mb-3">
+        <label className="form-label">Nama Produk</label>
+        <input
+          type="text"
+          className="form-control"
+          value={nama}
+          onChange={(e) => setNama(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Resep</label>
+        <textarea
+          className="form-control"
+          rows="3"
+          value={resep}
+          onChange={(e) => setResep(e.target.value)}
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Cara Buat</label>
+        <textarea
+          className="form-control"
+          rows="3"
+          value={caraBuat}
+          onChange={(e) => setCaraBuat(e.target.value)}
+        />
+      </div>
+      <button type="submit" className="btn btn-success w-100">
+        {initialProduk ? "Update Produk" : "Tambah Produk"}
+      </button>
+    </form>
   );
 };
 

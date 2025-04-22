@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getPesanan = async () => {
   try {
-    const response = await axios.get("/api/pesanan");
+    const response = await axios.get("/pesanan");
     return response.data;
   } catch (error) {
     console.error("Error fetching pesanan:", error);
@@ -12,7 +12,7 @@ export const getPesanan = async () => {
 
 export const createPesanan = async (pesanan) => {
   try {
-    const response = await axios.post("/api/pesanan", pesanan);
+    const response = await axios.post("/pesanan", pesanan);
     return response.data;
   } catch (error) {
     console.error("Error creating pesanan:", error);
@@ -22,7 +22,7 @@ export const createPesanan = async (pesanan) => {
 
 export const updatePesanan = async (id, pesanan) => {
   try {
-    const response = await axios.put(`/api/pesanan/${id}`, pesanan);
+    const response = await axios.put(`/pesanan/${id}`, pesanan);
     return response.data;
   } catch (error) {
     console.error("Error updating pesanan:", error);
@@ -32,7 +32,7 @@ export const updatePesanan = async (id, pesanan) => {
 
 export const deletePesanan = async (id) => {
   try {
-    await axios.delete(`/api/pesanan/${id}`);
+    await axios.delete(`/pesanan/${id}`);
   } catch (error) {
     console.error("Error deleting pesanan:", error);
     throw error;

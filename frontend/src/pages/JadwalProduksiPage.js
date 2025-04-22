@@ -1,22 +1,26 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Container, VStack, Heading, useToast } from "@chakra-ui/react";
-import JadwalProduksiForm from "../components/jadwalProduksiForm";
-import JadwalProduksiList from "../components/jadwalProduksiList";
-import * as jadwalService from "../services/jadwalService";
+import JadwalProduksiForm from "../components/JadwalProduksiForm";
+import JadwalProduksiList from "../components/JadwalProduksiList";
+import * as jadwalService from "../services/jadwalProduksiService";
 
 const JadwalProduksiPage = () => {
   const [jadwal, setJadwal] = useState([]);
   const [editingJadwal, setEditingJadwal] = useState(null);
-  const toast = useToast();
+  const [alert, setAlert] = useState(null);
+
+  const showAlert = (message, variant) => {
+    setAlert({ message, variant });
+    setTimeout(() => setAlert(null), 3000);
+  };
 
   const fetchJadwal = useCallback(async () => {
     try {
       const data = await jadwalService.getJadwalProduksi();
       setJadwal(data);
     } catch {
-      toast({ title: "Gagal mengambil jadwal", status: "error", isClosable: true });
+      showAlert("Gagal mengambil jadwal", "danger");
     }
-  }, [toast]);
+  }, []);
 
   useEffect(() => {
     fetchJadwal();
@@ -28,15 +32,15 @@ const JadwalProduksiPage = () => {
       if (data._id) {
         updated = await jadwalService.updateJadwalProduksi(data._id, data);
         setJadwal((prev) => prev.map((j) => (j._id === data._id ? updated : j)));
-        toast({ title: "Jadwal diperbarui", status: "success", isClosable: true });
+        showAlert("Jadwal diperbarui", "success");
       } else {
         updated = await jadwalService.createJadwalProduksi(data);
         setJadwal((prev) => [updated, ...prev]);
-        toast({ title: "Jadwal ditambahkan", status: "success", isClosable: true });
+        showAlert("Jadwal ditambahkan", "success");
       }
       setEditingJadwal(null);
     } catch {
-      toast({ title: "Gagal menyimpan jadwal", status: "error", isClosable: true });
+      showAlert("Gagal menyimpan jadwal", "danger");
     }
   };
 
@@ -44,20 +48,25 @@ const JadwalProduksiPage = () => {
     try {
       await jadwalService.deleteJadwalProduksi(id);
       setJadwal((prev) => prev.filter((j) => j._id !== id));
-      toast({ title: "Jadwal dihapus", status: "success", isClosable: true });
+      showAlert("Jadwal dihapus", "success");
     } catch {
-      toast({ title: "Gagal menghapus jadwal", status: "error", isClosable: true });
+      showAlert("Gagal menghapus jadwal", "danger");
     }
   };
 
   return (
-    <Container maxW="container.md" py={8}>
-      <VStack spacing={8}>
-        <Heading>Jadwal Produksi</Heading>
+    <div className="container py-4">
+      <div className="d-flex flex-column gap-4">
+        <h2>Jadwal Produksi</h2>
+        {alert && (
+          <div className={`alert alert-${alert.variant}`} role="alert">
+            {alert.message}
+          </div>
+        )}
         <JadwalProduksiForm onSubmit={handleAddOrUpdate} initialJadwal={editingJadwal} />
         <JadwalProduksiList jadwal={jadwal} onEdit={setEditingJadwal} onDelete={handleDelete} />
-      </VStack>
-    </Container>
+      </div>
+    </div>
   );
 };
 

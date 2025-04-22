@@ -1,6 +1,4 @@
-// frontend/src/components/pesananForm.js
-import React, { useEffect, useState } from "react";
-import { Box, FormControl, FormLabel, Input, Textarea, Button, VStack } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 
 const PesananForm = ({ onSubmit, initialPesanan = null }) => {
   const [produk, setProduk] = useState("");
@@ -35,37 +33,68 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} p={4} borderWidth={1} borderRadius="md">
-      <VStack spacing={4}>
-        <FormControl isRequired>
-          <FormLabel>Produk</FormLabel>
-          <Input value={produk} onChange={(e) => setProduk(e.target.value)} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Spesifikasi</FormLabel>
-          <Textarea value={spesifikasi} onChange={(e) => setSpesifikasi(e.target.value)} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Waktu Siap</FormLabel>
-          <Input type="datetime-local" value={waktuSiap} onChange={(e) => setWaktuSiap(e.target.value)} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Waktu Antar</FormLabel>
-          <Input type="datetime-local" value={waktuAntar} onChange={(e) => setWaktuAntar(e.target.value)} />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Tipe Packaging</FormLabel>
-          <Input value={tipePackaging} onChange={(e) => setTipePackaging(e.target.value)} />
-        </FormControl>
-        <FormControl display="flex" alignItems="center">
-          <FormLabel mb="0">Perlu Kartu Nama?</FormLabel>
-          <Input type="checkbox" isChecked={perluKartuNama} onChange={(e) => setPerluKartuNama(e.target.checked)} />
-        </FormControl>
-        <Button colorScheme="blue" type="submit" width="full">
-          {initialPesanan ? "Update Pesanan" : "Tambah Pesanan"}
-        </Button>
-      </VStack>
-    </Box>
+    <form onSubmit={handleSubmit} className="p-4 border rounded">
+      <div className="mb-3">
+        <label className="form-label">Produk</label>
+        <input
+          type="text"
+          className="form-control"
+          value={produk}
+          onChange={(e) => setProduk(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Spesifikasi</label>
+        <textarea
+          className="form-control"
+          value={spesifikasi}
+          onChange={(e) => setSpesifikasi(e.target.value)}
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Waktu Siap</label>
+        <input
+          type="datetime-local"
+          className="form-control"
+          value={waktuSiap}
+          onChange={(e) => setWaktuSiap(e.target.value)}
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Waktu Antar</label>
+        <input
+          type="datetime-local"
+          className="form-control"
+          value={waktuAntar}
+          onChange={(e) => setWaktuAntar(e.target.value)}
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Tipe Packaging</label>
+        <input
+          type="text"
+          className="form-control"
+          value={tipePackaging}
+          onChange={(e) => setTipePackaging(e.target.value)}
+        />
+      </div>
+      <div className="form-check mb-3">
+        <input
+          type="checkbox"
+          className="form-check-input"
+          id="kartuNamaCheck"
+          checked={perluKartuNama}
+          onChange={(e) => setPerluKartuNama(e.target.checked)}
+        />
+        <label className="form-check-label" htmlFor="kartuNamaCheck">
+          Perlu Kartu Nama?
+        </label>
+      </div>
+      <button type="submit" className="btn btn-primary w-100">
+        {initialPesanan ? "Update Pesanan" : "Tambah Pesanan"}
+      </button>
+    </form>
   );
 };
 

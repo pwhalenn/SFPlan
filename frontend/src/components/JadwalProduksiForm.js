@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Box, FormControl, FormLabel, Input, Button, VStack } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 
 const JadwalProduksiForm = ({ onSubmit, initialJadwal = null }) => {
   const [produk, setProduk] = useState("");
@@ -29,25 +28,41 @@ const JadwalProduksiForm = ({ onSubmit, initialJadwal = null }) => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit} p={4} borderWidth={1} borderRadius="md">
-      <VStack spacing={4}>
-        <FormControl isRequired>
-          <FormLabel>Produk</FormLabel>
-          <Input value={produk} onChange={(e) => setProduk(e.target.value)} />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Waktu Mulai</FormLabel>
-          <Input type="datetime-local" value={waktuMulai} onChange={(e) => setWaktuMulai(e.target.value)} />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Waktu Selesai</FormLabel>
-          <Input type="datetime-local" value={waktuSelesai} onChange={(e) => setWaktuSelesai(e.target.value)} />
-        </FormControl>
-        <Button colorScheme="purple" type="submit" width="full">
-          {initialJadwal ? "Update Jadwal" : "Tambah Jadwal"}
-        </Button>
-      </VStack>
-    </Box>
+    <form onSubmit={handleSubmit} className="p-4 border rounded shadow-sm bg-light">
+      <div className="mb-3">
+        <label className="form-label">Produk</label>
+        <input
+          type="text"
+          className="form-control"
+          value={produk}
+          onChange={(e) => setProduk(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Waktu Mulai</label>
+        <input
+          type="datetime-local"
+          className="form-control"
+          value={waktuMulai}
+          onChange={(e) => setWaktuMulai(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Waktu Selesai</label>
+        <input
+          type="datetime-local"
+          className="form-control"
+          value={waktuSelesai}
+          onChange={(e) => setWaktuSelesai(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit" className="btn btn-primary w-100">
+        {initialJadwal ? "Update Jadwal" : "Tambah Jadwal"}
+      </button>
+    </form>
   );
 };
 

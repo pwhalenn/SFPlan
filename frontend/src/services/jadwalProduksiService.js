@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getJadwalProduksi = async () => {
   try {
-    const response = await axios.get("/api/jadwal-produksi");
+    const response = await axios.get("/jadwal-produksi");
     return response.data;
   } catch (error) {
     console.error("Error fetching jadwal produksi:", error);
@@ -12,7 +12,7 @@ export const getJadwalProduksi = async () => {
 
 export const createJadwalProduksi = async (jadwal) => {
   try {
-    const response = await axios.post("/api/jadwal-produksi", jadwal);
+    const response = await axios.post("/jadwal-produksi", jadwal);
     return response.data;
   } catch (error) {
     console.error("Error creating jadwal produksi:", error);
@@ -22,7 +22,7 @@ export const createJadwalProduksi = async (jadwal) => {
 
 export const updateJadwalProduksi = async (id, jadwal) => {
   try {
-    const response = await axios.put(`/api/jadwal-produksi/${id}`, jadwal);
+    const response = await axios.put(`/jadwal-produksi/${id}`, jadwal);
     return response.data;
   } catch (error) {
     console.error("Error updating jadwal produksi:", error);
@@ -32,7 +32,7 @@ export const updateJadwalProduksi = async (id, jadwal) => {
 
 export const deleteJadwalProduksi = async (id) => {
   try {
-    await axios.delete(`/api/jadwal-produksi/${id}`);
+    await axios.delete(`/jadwal-produksi/${id}`);
   } catch (error) {
     console.error("Error deleting jadwal produksi:", error);
     throw error;

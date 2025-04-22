@@ -1,32 +1,42 @@
-import React from "react";
-import { Box, VStack, Heading, Text, IconButton, HStack, Checkbox } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-
 const PesananList = ({ pesanan, onDelete, onEdit }) => {
   return (
-    <VStack spacing={4} width="full">
+    <div className="d-flex flex-column gap-3 w-100">
       {pesanan.map((item) => (
-        <Box key={item._id} width="full" p={4} background="blue.100" borderWidth={1} borderRadius="md">
-          <HStack justifyContent="space-between" alignItems="start">
-            <Box flex={1}>
-              <Heading size="md" mb={2}>{item.produk}</Heading>
-              <Text><strong>Spesifikasi:</strong> {item.spesifikasi}</Text>
-              <Text><strong>Waktu Siap:</strong> {item.waktu_siap}</Text>
-              <Text><strong>Waktu Antar:</strong> {item.waktu_antar}</Text>
-              <Text><strong>Tipe Packaging:</strong> {item.tipe_packaging}</Text>
-              <Text>
+        <div
+          key={item._id}
+          className="border rounded bg-light p-3"
+          style={{ backgroundColor: "#cfe2ff" }}
+        >
+          <div className="d-flex justify-content-between align-items-start">
+            <div className="flex-grow-1">
+              <h5 className="mb-2">{item.produk}</h5>
+              <p><strong>Spesifikasi:</strong> {item.spesifikasi}</p>
+              <p><strong>Waktu Siap:</strong> {item.waktu_siap}</p>
+              <p><strong>Waktu Antar:</strong> {item.waktu_antar}</p>
+              <p><strong>Tipe Packaging:</strong> {item.tipe_packaging}</p>
+              <p>
                 <strong>Kartu Nama:</strong>{" "}
-                <Checkbox isChecked={item.perlu_kartu_nama} isReadOnly />
-              </Text>
-            </Box>
-            <HStack>
-              <IconButton icon={<EditIcon />} colorScheme="blue" onClick={() => onEdit(item)} />
-              <IconButton icon={<DeleteIcon />} colorScheme="red" onClick={() => onDelete(item._id)} />
-            </HStack>
-          </HStack>
-        </Box>
+                <input type="checkbox" checked={item.perlu_kartu_nama} disabled />
+              </p>
+            </div>
+            <div className="d-flex flex-column gap-2">
+              <button
+                className="btn btn-sm btn-primary"
+                onClick={() => onEdit(item)}
+              >
+                Edit
+              </button>
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={() => onDelete(item._id)}
+              >
+                Hapus
+              </button>
+            </div>
+          </div>
+        </div>
       ))}
-    </VStack>
+    </div>
   );
 };
 
