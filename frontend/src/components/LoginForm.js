@@ -11,7 +11,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       await loginUser({ username, password });
-      navigate("/pesanan");
+      navigate("/dashboard"); // belum
     } catch (error) {
       alert("Login gagal. Username atau password salah.");
     }
@@ -42,6 +42,17 @@ const LoginForm = () => {
       <button type="submit" className="btn btn-primary w-100">
         Login
       </button>
+
+      <div className="mt-3 text-center">
+        <span>Don't have an account? </span>
+        <button
+          type="button"
+          className="btn btn-link p-0"
+          onClick={() => navigate("/register")}
+        >
+          Register now
+        </button>
+      </div>
     </form>
   );
 };

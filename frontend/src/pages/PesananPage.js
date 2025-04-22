@@ -39,7 +39,8 @@ const PesananPage = () => {
         showAlert("Pesanan ditambahkan", "success");
       }
       setEditingPesanan(null);
-    } catch {
+    } catch (err) {
+      console.error("Error saat menyimpan pesanan:", err);
       showAlert("Gagal menyimpan pesanan", "danger");
     }
   };

@@ -13,7 +13,10 @@ const RegisterForm = () => {
       await registerUser({ username, password });
       navigate("/auth/login");
     } catch (error) {
-      alert("Gagal register. Username mungkin sudah digunakan.");
+      console.error(error);
+      const errorMessage =
+        error.response?.data?.message || "Gagal register. Username mungkin sudah digunakan.";
+      alert(errorMessage);
     }
   };
 
@@ -42,6 +45,16 @@ const RegisterForm = () => {
       <button type="submit" className="btn btn-teal w-100 btn btn-primary">
         Register
       </button>
+      <div className="mt-3 text-center">
+        <span>Already have an account? </span>
+        <button
+          type="button"
+          className="btn btn-link p-0"
+          onClick={() => navigate("/login")}
+        >
+          Login now
+        </button>
+      </div>
     </form>
   );
 };

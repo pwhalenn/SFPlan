@@ -1,96 +1,112 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const PesananForm = ({ onSubmit, initialPesanan = null }) => {
-  const [produk, setProduk] = useState("");
-  const [spesifikasi, setSpesifikasi] = useState("");
-  const [waktuSiap, setWaktuSiap] = useState("");
-  const [waktuAntar, setWaktuAntar] = useState("");
-  const [perluKartuNama, setPerluKartuNama] = useState(false);
-  const [tipePackaging, setTipePackaging] = useState("");
+  const [produkList, setProdukList] = useState([]);
+  const [selectedProduk, setSelectedProduk] = useState("");
+  const [kuantitas, setKuantitas] = useState(1);
+  const [namaPelanggan, setNamaPelanggan] = useState("");
+  const [waktuMulai, setWaktuMulai] = useState("");
+  const [catatan, setCatatan] = useState("");
+
+  useEffect(() => {
+    // Fetch produk dari backend
+    const fetchProduk = async () => {
+      try {
+        const res = await axios.get("/produk");
+        setProdukList(res.data);
+      } catch (err) {
+        console.error("Gagal mengambil data produk:", err);
+      }
+    };
+
+    fetchProduk();
+  }, []);
 
   useEffect(() => {
     if (initialPesanan) {
-      setProduk(initialPesanan.produk || "");
-      setSpesifikasi(initialPesanan.spesifikasi || "");
-      setWaktuSiap(initialPesanan.waktu_siap || "");
-      setWaktuAntar(initialPesanan.waktu_antar || "");
-      setTipePackaging(initialPesanan.tipe_packaging || "");
-      setPerluKartuNama(initialPesanan.perlu_kartu_nama || false);
+      setSelectedProduk(initialPesanan.produk || "");
+      setKuantitas(initialPesanan.kuantitas || 1);
+      setNamaPelanggan(initialPesanan.nama_pelanggan || "");
+      setWaktuMulai(initialPesanan.waktu_mulai || "");
+      setCatatan(initialPesanan.catatan || "");
     }
   }, [initialPesanan]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({
-      produk,
-      spesifikasi,
-      waktu_siap: waktuSiap,
-      waktu_antar: waktuAntar,
-      tipe_packaging: tipePackaging,
-      perlu_kartu_nama: perluKartuNama,
-      _id: initialPesanan ? initialPesanan._id : undefined,
+      produk: selectedProduk,
+      kuantitas,
+      nama_pelanggan: namaPelanggan,
+      waktu_mulai: waktuMulai,
+      catatan,
+      _id: initialPesanan?._id,
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded">
       <div className="mb-3">
-        <label className="form-label">Produk</label>
-        <input
-          type="text"
+        <label className="form-label">Nama Produk</label>
+        <select
           className="form-control"
-          value={produk}
-          onChange={(e) => setProduk(e.target.value)}
+          value={selectedProduk}
+          onChange={(e) => setSelectedProduk(e.target.value)}
+          required
+        >
+          <option value="">-- Pilih Produk --</option>
+          {produkList.map((p) => (
+            <option key={p._id} value={p.nama}>
+              {p.nama}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Kuantitas</label>
+        <input
+          type="number"
+          className="form-control"
+          value={kuantitas}
+          onChange={(e) => setKuantitas(e.target.value)}
+          min="1"
           required
         />
       </div>
+
       <div className="mb-3">
-        <label className="form-label">Spesifikasi</label>
-        <textarea
-          className="form-control"
-          value={spesifikasi}
-          onChange={(e) => setSpesifikasi(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Waktu Siap</label>
-        <input
-          type="datetime-local"
-          className="form-control"
-          value={waktuSiap}
-          onChange={(e) => setWaktuSiap(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Waktu Antar</label>
-        <input
-          type="datetime-local"
-          className="form-control"
-          value={waktuAntar}
-          onChange={(e) => setWaktuAntar(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Tipe Packaging</label>
+        <label className="form-label">Nama Pelanggan</label>
         <input
           type="text"
           className="form-control"
-          value={tipePackaging}
-          onChange={(e) => setTipePackaging(e.target.value)}
+          value={namaPelanggan}
+          onChange={(e) => setNamaPelanggan(e.target.value)}
+          required
         />
       </div>
-      <div className="form-check mb-3">
+
+      <div className="mb-3">
+        <label className="form-label">Waktu Mulai Buat</label>
         <input
-          type="checkbox"
-          className="form-check-input"
-          id="kartuNamaCheck"
-          checked={perluKartuNama}
-          onChange={(e) => setPerluKartuNama(e.target.checked)}
+          type="datetime-local"
+          className="form-control"
+          value={waktuMulai}
+          onChange={(e) => setWaktuMulai(e.target.value)}
+          required
         />
-        <label className="form-check-label" htmlFor="kartuNamaCheck">
-          Perlu Kartu Nama?
-        </label>
       </div>
+
+      <div className="mb-3">
+        <label className="form-label">Catatan</label>
+        <textarea
+          className="form-control"
+          value={catatan}
+          onChange={(e) => setCatatan(e.target.value)}
+        />
+      </div>
+
       <button type="submit" className="btn btn-primary w-100">
         {initialPesanan ? "Update Pesanan" : "Tambah Pesanan"}
       </button>

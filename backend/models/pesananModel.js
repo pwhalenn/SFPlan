@@ -2,10 +2,7 @@
 const mongoose = require("mongoose");
 
 const pesananSchema = new mongoose.Schema({
-  nama_pelanggan: {
-    type: String,
-  },
-  produk: {
+  nama_produk: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Produk',
     required: true,
@@ -14,31 +11,15 @@ const pesananSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  tanggal_pesanan: {
-    type: Date,
-    default: Date.now,
-  },
-  waktu_siap: {
-    type: String,
-  },
-  waktu_antar: {
+  waktu_mulai_buat: {
     type: String,
   },
   catatan: {
     type: String,
   },
-  tipe_kemasan: {
+  nama_pelanggan: {
     type: String,
   },
-  butuh_kartu_nama: {
-    type: Boolean,
-    default: false,
-  },
-  status: {
-    type: String,
-    enum: ['baru', 'diproses', 'selesai', 'batal'],
-    default: 'baru',
-  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Pesanan', pesananSchema);
