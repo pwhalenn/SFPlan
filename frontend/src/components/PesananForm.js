@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as produkService from "../services/produkService";
 import axios from "axios";
 
 const PesananForm = ({ onSubmit, initialPesanan = null }) => {
@@ -8,9 +9,9 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
   const [namaPelanggan, setNamaPelanggan] = useState("");
   const [waktuMulai, setWaktuMulai] = useState("");
   const [catatan, setCatatan] = useState("");
+  const [produk, setProduk] = useState("");
 
   useEffect(() => {
-    // Fetch produk dari backend
     const fetchProduk = async () => {
       try {
         const res = await axios.get("/produk");
@@ -30,17 +31,19 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
       setNamaPelanggan(initialPesanan.nama_pelanggan || "");
       setWaktuMulai(initialPesanan.waktu_mulai || "");
       setCatatan(initialPesanan.catatan || "");
+      setProduk(initialPesanan.produk_id || "");
     }
   }, [initialPesanan]);
 
   const handleSubmit = (e) => {
+    console.log("Form disubmit");
     e.preventDefault();
     onSubmit({
-      produk: selectedProduk,
+      nama_produk: selectedProduk,
       kuantitas,
-      nama_pelanggan: namaPelanggan,
-      waktu_mulai: waktuMulai,
+      waktu_mulai_buat: waktuMulai,
       catatan,
+      nama_pelanggan: namaPelanggan,
       _id: initialPesanan?._id,
     });
   };
@@ -48,17 +51,17 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded">
       <div className="mb-3">
-        <label className="form-label">Nama Produk</label>
+        <label className="form-label">Produk</label>
         <select
-          className="form-control"
-          value={selectedProduk}
-          onChange={(e) => setSelectedProduk(e.target.value)}
+          className="form-select"
+          value={produk}
+          onChange={(e) => setProduk(e.target.value)}
           required
         >
           <option value="">-- Pilih Produk --</option>
           {produkList.map((p) => (
-            <option key={p._id} value={p.nama}>
-              {p.nama}
+            <option key={p._id} value={p._id}>
+              {p.nama_produk}
             </option>
           ))}
         </select>
@@ -72,17 +75,6 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
           value={kuantitas}
           onChange={(e) => setKuantitas(e.target.value)}
           min="1"
-          required
-        />
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Nama Pelanggan</label>
-        <input
-          type="text"
-          className="form-control"
-          value={namaPelanggan}
-          onChange={(e) => setNamaPelanggan(e.target.value)}
           required
         />
       </div>
@@ -104,6 +96,17 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
           className="form-control"
           value={catatan}
           onChange={(e) => setCatatan(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Nama Pelanggan</label>
+        <input
+          type="text"
+          className="form-control"
+          value={namaPelanggan}
+          onChange={(e) => setNamaPelanggan(e.target.value)}
+          required
         />
       </div>
 

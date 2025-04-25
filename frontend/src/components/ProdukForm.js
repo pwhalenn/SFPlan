@@ -1,67 +1,78 @@
-import React, { useState, useEffect } from "react";
+// src/components/PesananForm.js
+import React, { useEffect, useState } from "react";
+import * as produkService from "../services/produkService"; // pastikan file ini ada dan benar
 
-const ProdukForm = ({ onSubmit, initialProduk = null }) => {
-  const [namaProduk, setNama] = useState("");
-  const [resep, setResep] = useState("");
-  const [caraBuat, setCaraBuat] = useState("");
+const PesananForm = ({ onSubmit, initialPesanan = null }) => {
+  const [produkList, setProdukList] = useState([]);
+  const [selectedProduk, setSelectedProduk] = useState("");
+  const [jumlah, setJumlah] = useState("");
 
   useEffect(() => {
-    if (initialProduk) {
-      setNama(initialProduk.nama_produk || "");
-      setResep(initialProduk.resep || "");
-      setCaraBuat(initialProduk.cara_buat || "");
+    const fetchProduk = async () => {
+      try {
+        const data = await produkService.getProduk();
+        setProdukList(data);
+      } catch (err) {
+        console.error("Gagal mengambil daftar produk", err);
+      }
+    };
+    fetchProduk();
+  }, []);
+
+  useEffect(() => {
+    if (initialPesanan) {
+      setSelectedProduk(initialPesanan.produk || "");
+      setJumlah(initialPesanan.jumlah || "");
     } else {
-      setNama("");
-      setResep("");
-      setCaraBuat("");
+      setSelectedProduk("");
+      setJumlah("");
     }
-  }, [initialProduk]);
+  }, [initialPesanan]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({
-      nama_produk: namaProduk,
-      resep,
-      cara_buat: caraBuat,
-      _id: initialProduk ? initialProduk._id : undefined,
+      produk: selectedProduk,
+      jumlah,
+      _id: initialPesanan?._id,
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded">
       <div className="mb-3">
-        <label className="form-label">Nama Produk</label>
+        <label className="form-label">Produk</label>
+        <select
+          className="form-select"
+          value={selectedProduk}
+          onChange={(e) => setSelectedProduk(e.target.value)}
+          required
+        >
+          <option value="">Pilih Produk</option>
+          {produkList.map((produk) => (
+            <option key={produk._id} value={produk._id}>
+              {produk.nama_produk}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Jumlah</label>
         <input
-          type="text"
+          type="number"
           className="form-control"
-          value={namaProduk}
-          onChange={(e) => setNama(e.target.value)}
+          value={jumlah}
+          onChange={(e) => setJumlah(e.target.value)}
           required
         />
       </div>
-      <div className="mb-3">
-        <label className="form-label">Resep</label>
-        <textarea
-          className="form-control"
-          rows="3"
-          value={resep}
-          onChange={(e) => setResep(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Cara Buat</label>
-        <textarea
-          className="form-control"
-          rows="3"
-          value={caraBuat}
-          onChange={(e) => setCaraBuat(e.target.value)}
-        />
-      </div>
-      <button type="submit" className="btn btn-success w-100">
-        {initialProduk ? "Update Produk" : "Tambah Produk"}
+
+      <button type="submit" className="btn btn-primary w-100">
+        {initialPesanan ? "Update Pesanan" : "Tambah Pesanan"}
       </button>
     </form>
   );
 };
 
-export default ProdukForm;
+export default PesananForm;

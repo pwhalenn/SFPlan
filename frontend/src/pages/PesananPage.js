@@ -28,6 +28,8 @@ const PesananPage = () => {
 
   const handleAddOrUpdate = async (data) => {
     try {
+      console.log("Data dikirim ke backend:", data);
+  
       let updated;
       if (data._id) {
         updated = await pesananService.updatePesanan(data._id, data);
@@ -43,7 +45,7 @@ const PesananPage = () => {
       console.error("Error saat menyimpan pesanan:", err);
       showAlert("Gagal menyimpan pesanan", "danger");
     }
-  };
+  };  
 
   const handleDelete = async (id) => {
     try {
