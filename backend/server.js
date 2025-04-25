@@ -10,7 +10,6 @@ const MongoStore = require("connect-mongo");
 const authRoute = require("./routes/authRoute");
 const pesananRoute = require("./routes/pesananRoute");
 const produkRoute = require("./routes/produkRoute");
-const jadwalProduksiRoute = require("./routes/jadwalProduksiRoute");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,7 +47,6 @@ app.use(
 app.use("/auth", authRoute);
 app.use("/pesanan", pesananRoute);
 app.use("/produk", produkRoute);
-app.use("/jadwal-produksi", jadwalProduksiRoute);
 
 app.get("/", (req, res) => {
   res.redirect("/auth/login");

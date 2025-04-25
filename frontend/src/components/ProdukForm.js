@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 const ProdukForm = ({ onSubmit, initialProduk = null }) => {
-  const [nama, setNama] = useState("");
+  const [namaProduk, setNama] = useState("");
   const [resep, setResep] = useState("");
   const [caraBuat, setCaraBuat] = useState("");
 
   useEffect(() => {
     if (initialProduk) {
-      setNama(initialProduk.nama || "");
+      setNama(initialProduk.nama_produk || "");
       setResep(initialProduk.resep || "");
       setCaraBuat(initialProduk.cara_buat || "");
     } else {
@@ -20,7 +20,7 @@ const ProdukForm = ({ onSubmit, initialProduk = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({
-      nama,
+      nama_produk: namaProduk,
       resep,
       cara_buat: caraBuat,
       _id: initialProduk ? initialProduk._id : undefined,
@@ -34,7 +34,7 @@ const ProdukForm = ({ onSubmit, initialProduk = null }) => {
         <input
           type="text"
           className="form-control"
-          value={nama}
+          value={namaProduk}
           onChange={(e) => setNama(e.target.value)}
           required
         />

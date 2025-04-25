@@ -10,7 +10,8 @@ const RegisterForm = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await registerUser({ username, password });
+      const response = await registerUser({ username, password });
+      console.log("Register success:", response);
       navigate("/auth/login");
     } catch (error) {
       console.error(error);

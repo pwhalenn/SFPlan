@@ -3,10 +3,14 @@ const Produk = require("../models/produkModel");
 // Create a new produk
 exports.createProduk = async (req, res) => {
   try {
+    console.log("✅ [POST] /produk - Request diterima");
+    console.log("📦 Request body:", req.body);
     const newProduk = new Produk(req.body);
     const savedProduk = await newProduk.save();
+    console.log("💾 Produk berhasil disimpan:", savedProduk);
     res.status(201).json(savedProduk);
   } catch (error) {
+    console.error("❌ Error saat menyimpan produk:", error);
     res.status(500).json({ message: "Error creating produk", error });
   }
 };

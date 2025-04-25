@@ -8,7 +8,7 @@ const ProdukList = ({ produk, onDelete, onEdit }) => {
         >
           <div className="d-flex justify-content-between align-items-start">
             <div className="flex-grow-1">
-              <h5 className="mb-2">{item.nama}</h5>
+              <h5 className="mb-2">{item.nama_produk}</h5>
               <p><strong>Resep:</strong> {item.resep}</p>
               <p><strong>Cara Buat:</strong> {item.cara_buat}</p>
             </div>
