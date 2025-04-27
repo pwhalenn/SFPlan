@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import * as produkService from "../services/produkService";
 import axios from "axios";
 
 const PesananForm = ({ onSubmit, initialPesanan = null }) => {
   const [produkList, setProdukList] = useState([]);
-  const [selectedProduk, setSelectedProduk] = useState("");
   const [kuantitas, setKuantitas] = useState(1);
   const [namaPelanggan, setNamaPelanggan] = useState("");
   const [waktuMulai, setWaktuMulai] = useState("");
@@ -22,11 +20,8 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
     };
 
     fetchProduk();
-  }, []);
 
-  useEffect(() => {
     if (initialPesanan) {
-      setSelectedProduk(initialPesanan.produk || "");
       setKuantitas(initialPesanan.kuantitas || 1);
       setNamaPelanggan(initialPesanan.nama_pelanggan || "");
       setWaktuMulai(initialPesanan.waktu_mulai || "");
@@ -39,7 +34,7 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
     console.log("Form disubmit");
     e.preventDefault();
     onSubmit({
-      nama_produk: selectedProduk,
+      nama_produk: produk,
       kuantitas,
       waktu_mulai_buat: waktuMulai,
       catatan,
@@ -82,7 +77,7 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
       <div className="mb-3">
         <label className="form-label">Waktu Mulai Buat</label>
         <input
-          type="datetime-local"
+          type="time" // ubah ini
           className="form-control"
           value={waktuMulai}
           onChange={(e) => setWaktuMulai(e.target.value)}

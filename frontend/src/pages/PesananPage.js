@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router-dom"; // <- Tambahkan ini
 import PesananForm from "../components/PesananForm";
 import PesananList from "../components/PesananList";
 import * as pesananService from "../services/pesananService";
@@ -60,14 +61,22 @@ const PesananPage = () => {
   return (
     <div className="container py-4">
       <div className="d-flex flex-column gap-4">
+        {/* Tombol kembali */}
+        <div className="d-flex justify-content-between align-items-center">
+          <Link to="/dashboard" className="btn btn-secondary">
+            ← Kembali ke Dashboard
+          </Link>
+        </div>
+
         <h2>Manajemen Pesanan</h2>
+
         {alert && (
           <div className={`alert alert-${alert.variant}`} role="alert">
             {alert.message}
           </div>
         )}
+        
         <PesananForm onSubmit={handleAddOrUpdate} initialPesanan={editingPesanan} />
-        <PesananList pesanan={pesanan} onEdit={setEditingPesanan} onDelete={handleDelete} />
       </div>
     </div>
   );

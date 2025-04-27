@@ -9,15 +9,13 @@ const PesananList = ({ pesanan, onDelete, onEdit }) => {
         >
           <div className="d-flex justify-content-between align-items-start">
             <div className="flex-grow-1">
-              <h5 className="mb-2">{item.produk}</h5>
-              <p><strong>Spesifikasi:</strong> {item.spesifikasi}</p>
-              <p><strong>Waktu Siap:</strong> {item.waktu_siap}</p>
-              <p><strong>Waktu Antar:</strong> {item.waktu_antar}</p>
-              <p><strong>Tipe Packaging:</strong> {item.tipe_packaging}</p>
-              <p>
-                <strong>Kartu Nama:</strong>{" "}
-                <input type="checkbox" checked={item.perlu_kartu_nama} disabled />
-              </p>
+              <h5 className="mb-2">
+                {item.nama_produk?.nama_produk || "Nama Produk Tidak Ditemukan"}
+              </h5>
+              <p><strong>Kuantitas:</strong> {item.kuantitas}</p>
+              <p><strong>Waktu Mulai Buat:</strong> {item.waktu_mulai_buat || "-"}</p>
+              <p><strong>Catatan:</strong> {item.catatan || "-"}</p>
+              <p><strong>Nama Pelanggan:</strong> {item.nama_pelanggan || "-"}</p>
             </div>
             <div className="d-flex flex-column gap-2">
               <button
