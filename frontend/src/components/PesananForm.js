@@ -25,7 +25,7 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
     if (initialPesanan) {
       setKuantitas(initialPesanan.kuantitas || 1);
       setNamaPelanggan(initialPesanan.nama_pelanggan || "");
-      setWaktuMulai(initialPesanan.waktu_mulai || "");
+      setWaktuMulai(initialPesanan.waktu_mulai_buat || "");
       setCatatan(initialPesanan.catatan || "");
       setProduk(initialPesanan.produk_id || "");
       setTanggalPesanan(initialPesanan.tanggal_pesanan || "");

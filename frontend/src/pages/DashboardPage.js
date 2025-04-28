@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import PesananForm from "../components/PesananForm";
 
 const daysOfWeek = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
 const getNextWeekDates = (startDate = new Date()) => {
   const startOfWeek = new Date(startDate);
   const day = startOfWeek.getDay();
-  const diff = startDate.getDate() - day + (day === 0 ? -6 : 1); // start on Monday
+  const diff = startDate.getDate() - day + (day === 0 ? -6 : 1);
   const monday = new Date(startOfWeek.setDate(diff));
 
   const dates = Array.from({ length: 7 }, (_, i) => {
@@ -19,6 +20,9 @@ const getNextWeekDates = (startDate = new Date()) => {
 };
 
 const Dashboard = () => {
+  // Tambahkan state untuk menyimpan data produk
+  const [products, setProducts] = useState([]);
+  
   const [weekOffset, setWeekOffset] = useState(0);
   const [orders, setOrders] = useState({
     Senin: [],
@@ -29,6 +33,9 @@ const Dashboard = () => {
     Sabtu: [],
     Minggu: [],
   });
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPesanan, setSelectedPesanan] = useState(null);
+
   const navigate = useNavigate();
 
   const handleWeekChange = (offset) => {
@@ -44,40 +51,105 @@ const Dashboard = () => {
 
   const fetchOrders = async () => {
     try {
+      // Fetch products first
+      const productsRes = await axios.get("/produk");
+      const productsData = productsRes.data;
+      
+      // Create product map with debugging
+      const productMap = {};
+      productsData.forEach(product => {
+        productMap[product._id] = product.nama_produk;
+        console.log(`Adding product: ID=${product._id}, Name=${product.nama_produk}`);
+      });
+
+      // Fetch orders
       const res = await axios.get("/pesanan");
       const fetchedOrders = res.data;
-
+      
       const groupedOrders = {
-        Senin: [],
-        Selasa: [],
-        Rabu: [],
-        Kamis: [],
-        Jumat: [],
-        Sabtu: [],
-        Minggu: [],
+        Senin: [], Selasa: [], Rabu: [], Kamis: [], 
+        Jumat: [], Sabtu: [], Minggu: [],
       };
 
       fetchedOrders.forEach((order) => {
-        const dayOfWeek = new Date(order.tanggal_pesanan).toLocaleDateString("id-ID", { weekday: "long" });
-        const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+        // Log the entire order object
+        console.log("Full order data:", order);
 
+        // Try to get product ID - log each attempt
+        const productId = order.nama_produk;
+        console.log("Looking for product with ID:", productId);
+        console.log("Available product IDs:", Object.keys(productMap));
+
+        const dayOfWeek = new Date(order.tanggal_pesanan)
+          .toLocaleDateString("id-ID", { weekday: "long" });
+        const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+        
+        // Get product name
+        const productName = order.nama_produk; // Use nama_produk directly
+        
         if (groupedOrders[capitalizedDay]) {
           groupedOrders[capitalizedDay].push({
             id: order._id,
-            name: order.nama_pelanggan || "Pesanan",
+            name: productName || `Produk tidak ditemukan`,
             time: order.waktu_mulai_buat || "00:00",
+            fullData: {
+              ...order,
+              nama_produk: productName,
+              produk: productName, // Use nama_produk as produk
+            },
           });
         }
       });
 
       setOrders(groupedOrders);
     } catch (err) {
-      console.error(err);
+      console.error("Error in fetchOrders:", err.response?.data || err.message);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get("/produk");
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Gagal mengambil data produk:", err);
+    }
+  };
+
+  const handlePesananClick = (order) => {
+    const orderWithProductDetails = {
+      ...order.fullData,
+      availableProducts: products,
+      produk: order.fullData.produk,
+      produk_id: order.fullData.produk,
+      nama_produk: order.name,
+      tanggal_pesanan: new Date(order.fullData.tanggal_pesanan).toISOString().split('T')[0],
+      waktu_mulai_buat: order.fullData.waktu_mulai_buat,
+      kuantitas: order.fullData.kuantitas,
+      catatan: order.fullData.catatan,
+      nama_pelanggan: order.fullData.nama_pelanggan,
+      _id: order.id
+    };
+    setSelectedPesanan(orderWithProductDetails);
+    setShowModal(true);
+  };
+
+  const handleSubmit = async (updatedData) => {
+    try {
+      if (updatedData._id) {
+        await axios.put(`/pesanan/${updatedData._id}`, updatedData);
+      }
+      setShowModal(false);
+      setSelectedPesanan(null);
+      fetchOrders();
+    } catch (err) {
+      console.error("Gagal update pesanan:", err);
     }
   };
 
   useEffect(() => {
     fetchOrders();
+    fetchProducts();
   }, [weekOffset]);
 
   return (
@@ -139,8 +211,9 @@ const Dashboard = () => {
                     .map((order) => (
                       <div
                         key={order.id}
-                        className="bg-light border rounded p-2 mb-2 cursor-pointer"
-                        onClick={() => navigate(`/dashboard/pesanan/${order.id}`)}
+                        className="bg-light border rounded p-2 mb-2"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handlePesananClick(order)}
                       >
                         {order.name} ({order.time})
                       </div>
@@ -153,6 +226,23 @@ const Dashboard = () => {
           );
         })}
       </div>
+
+      {/* Modal untuk edit */}
+      {showModal && (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Edit Pesanan</h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <PesananForm initialPesanan={selectedPesanan} onSubmit={handleSubmit} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
