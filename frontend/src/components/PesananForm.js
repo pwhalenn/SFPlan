@@ -8,6 +8,7 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
   const [waktuMulai, setWaktuMulai] = useState("");
   const [catatan, setCatatan] = useState("");
   const [produk, setProduk] = useState("");
+  const [tanggalPesanan, setTanggalPesanan] = useState("");
 
   useEffect(() => {
     const fetchProduk = async () => {
@@ -27,11 +28,11 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
       setWaktuMulai(initialPesanan.waktu_mulai || "");
       setCatatan(initialPesanan.catatan || "");
       setProduk(initialPesanan.produk_id || "");
+      setTanggalPesanan(initialPesanan.tanggal_pesanan || "");
     }
   }, [initialPesanan]);
 
   const handleSubmit = (e) => {
-    console.log("Form disubmit");
     e.preventDefault();
     onSubmit({
       nama_produk: produk,
@@ -39,6 +40,7 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
       waktu_mulai_buat: waktuMulai,
       catatan,
       nama_pelanggan: namaPelanggan,
+      tanggal_pesanan: tanggalPesanan,
       _id: initialPesanan?._id,
     });
   };
@@ -75,9 +77,20 @@ const PesananForm = ({ onSubmit, initialPesanan = null }) => {
       </div>
 
       <div className="mb-3">
+        <label className="form-label">Tanggal Pesanan</label>
+        <input
+          type="date"
+          className="form-control"
+          value={tanggalPesanan}
+          onChange={(e) => setTanggalPesanan(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="mb-3">
         <label className="form-label">Waktu Mulai Buat</label>
         <input
-          type="time" // ubah ini
+          type="time"
           className="form-control"
           value={waktuMulai}
           onChange={(e) => setWaktuMulai(e.target.value)}

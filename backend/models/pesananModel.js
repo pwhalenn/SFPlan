@@ -1,4 +1,3 @@
-// models/pesanan.js
 const mongoose = require("mongoose");
 
 const pesananSchema = new mongoose.Schema({
@@ -19,6 +18,10 @@ const pesananSchema = new mongoose.Schema({
   },
   nama_pelanggan: {
     type: String,
+  },
+  tanggal_pesanan: {
+    type: Date,
+    required: true,
   },
 }, { timestamps: true });
 

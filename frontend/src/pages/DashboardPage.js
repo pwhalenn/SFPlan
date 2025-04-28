@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-// Dummy data
 const daysOfWeek = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
 const getNextWeekDates = (startDate = new Date()) => {
@@ -20,12 +20,6 @@ const getNextWeekDates = (startDate = new Date()) => {
 
 const Dashboard = () => {
   const [weekOffset, setWeekOffset] = useState(0);
-  const navigate = useNavigate();
-
-  // Dummy user data
-  const user = { name: "John Doe" }; // Replace with actual user data (e.g., from context or API)
-
-  // Dummy data for orders
   const [orders, setOrders] = useState({
     Senin: [],
     Selasa: [],
@@ -35,6 +29,7 @@ const Dashboard = () => {
     Sabtu: [],
     Minggu: [],
   });
+  const navigate = useNavigate();
 
   const handleWeekChange = (offset) => {
     setWeekOffset(weekOffset + offset);
@@ -43,10 +38,47 @@ const Dashboard = () => {
   const currentWeekDates = getNextWeekDates(new Date(Date.now() + weekOffset * 7 * 24 * 60 * 60 * 1000));
 
   const handleLogout = () => {
-    // Handle the logout logic here, e.g., clearing user data, redirecting to login
     console.log("User logged out");
-    navigate("/login"); // Navigate to login page after logout
+    navigate("/login");
   };
+
+  const fetchOrders = async () => {
+    try {
+      const res = await axios.get("/pesanan");
+      const fetchedOrders = res.data;
+
+      const groupedOrders = {
+        Senin: [],
+        Selasa: [],
+        Rabu: [],
+        Kamis: [],
+        Jumat: [],
+        Sabtu: [],
+        Minggu: [],
+      };
+
+      fetchedOrders.forEach((order) => {
+        const dayOfWeek = new Date(order.tanggal_pesanan).toLocaleDateString("id-ID", { weekday: "long" });
+        const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+
+        if (groupedOrders[capitalizedDay]) {
+          groupedOrders[capitalizedDay].push({
+            id: order._id,
+            name: order.nama_pelanggan || "Pesanan",
+            time: order.waktu_mulai_buat || "00:00",
+          });
+        }
+      });
+
+      setOrders(groupedOrders);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [weekOffset]);
 
   return (
     <div className="container py-4">
@@ -68,12 +100,24 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Weekly Schedule */}
-      <h2 className="mb-4">Jadwal Produksi Mingguan</h2>
+      {/* Weekly Schedule Header */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Jadwal Produksi Mingguan</h2>
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/pesanan")}
+        >
+          + Tambah Pesanan
+        </button>
+      </div>
+
+      {/* Week navigation */}
       <div className="d-flex justify-content-between mb-3">
         <button className="btn btn-outline-secondary" onClick={() => handleWeekChange(-1)}>Minggu Sebelumnya</button>
         <button className="btn btn-outline-secondary" onClick={() => handleWeekChange(1)}>Minggu Berikutnya</button>
       </div>
+
+      {/* Weekly Schedule Cards */}
       <div className="d-flex overflow-auto">
         {daysOfWeek.map((day, idx) => {
           const ordersForThatDay = orders[day] || [];
@@ -104,13 +148,6 @@ const Dashboard = () => {
                 ) : (
                   <div className="text-muted text-center">Belum ada pesanan</div>
                 )}
-
-                <div
-                  className="text-primary text-center mt-2 cursor-pointer"
-                  onClick={() => navigate(`/pesanan?day=${day}&date=${displayDate}`)}
-                >
-                  + Tambah Pesanan
-                </div>
               </div>
             </div>
           );
