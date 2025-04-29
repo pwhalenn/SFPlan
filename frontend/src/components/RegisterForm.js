@@ -10,11 +10,9 @@ const RegisterForm = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await registerUser({ username, password });
-      console.log("Register success:", response);
-      navigate("/auth/login");
+      await registerUser({ username, password });
+      navigate("/login");
     } catch (error) {
-      console.error(error);
       const errorMessage =
         error.response?.data?.message || "Gagal register. Username mungkin sudah digunakan.";
       alert(errorMessage);
@@ -22,38 +20,77 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleRegister} className="p-4 border rounded">
-      <div className="mb-3">
-        <label className="form-label">Username</label>
+    <form onSubmit={handleRegister}>
+      <div style={{ marginBottom: "1rem" }}>
+        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
+          Username
+        </label>
         <input
           type="text"
-          className="form-control"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          style={{
+            width: "100%",
+            padding: "0.5rem",
+            border: "1px solid #d1d5db",
+            borderRadius: "0.375rem",
+            fontSize: "1rem"
+          }}
         />
       </div>
-      <div className="mb-3">
-        <label className="form-label">Password</label>
+      <div style={{ marginBottom: "1rem" }}>
+        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
+          Password
+        </label>
         <input
           type="password"
-          className="form-control"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          style={{
+            width: "100%",
+            padding: "0.5rem",
+            border: "1px solid #d1d5db",
+            borderRadius: "0.375rem",
+            fontSize: "1rem"
+          }}
         />
       </div>
-      <button type="submit" className="btn btn-teal w-100 btn btn-primary">
+      <button
+        type="submit"
+        style={{
+          width: "100%",
+          padding: "0.75rem",
+          backgroundColor: "#ff85cb",
+          color: "white",
+          border: "none",
+          borderRadius: "0.375rem",
+          fontWeight: "600",
+          cursor: "pointer",
+          transition: "background-color 0.3s ease"
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#e873b6")}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#ff85cb")}
+      >
         Register
       </button>
-      <div className="mt-3 text-center">
-        <span>Already have an account? </span>
+
+      <div style={{ marginTop: "1rem", textAlign: "center" }}>
+        <span>Sudah punya akun? </span>
         <button
           type="button"
-          className="btn btn-link p-0"
           onClick={() => navigate("/login")}
+          style={{
+            background: "none",
+            border: "none",
+            color: "#3b82f6",
+            cursor: "pointer",
+            textDecoration: "underline",
+            fontSize: "1rem"
+          }}
         >
-          Login now
+          Login sekarang
         </button>
       </div>
     </form>
