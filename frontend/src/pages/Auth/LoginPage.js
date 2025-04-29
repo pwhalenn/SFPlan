@@ -26,11 +26,27 @@ const LoginPage = ({ onLogin }) => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <LoginForm onSubmit={handleLogin} />
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#f3f4f6" // abu-abu muda
+    }}>
+      <div style={{
+        padding: "2rem",
+        backgroundColor: "#ffffff",
+        borderRadius: "0.5rem",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        width: "100%",
+        maxWidth: "400px"
+      }}>
+        <h2 style={{ textAlign: "center", marginBottom: "1rem", color: "#111827" }}>Login</h2>
+        <LoginForm onSubmit={handleLogin} />
+      </div>
     </div>
   );
+  
 };
 
 export default LoginPage;

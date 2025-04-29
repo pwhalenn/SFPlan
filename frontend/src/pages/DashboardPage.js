@@ -191,10 +191,19 @@ const Dashboard = () => {
 
           return (
             <div
-              key={day}
-              className="flex-shrink-0 border rounded m-1 p-2"
-              style={{ minWidth: '200px', minHeight: '300px' }}
-            >
+            key={day}
+            className="flex-shrink-0 shadow-sm"
+            style={{
+              backgroundColor: "#ffffff",
+              borderRadius: "12px",
+              padding: "16px",
+              margin: "8px",
+              minWidth: "220px",
+              minHeight: "300px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.05)"
+            }}
+          >
+
               <div className="fw-bold text-center">
                 {day}<br />({displayDate})
               </div>
