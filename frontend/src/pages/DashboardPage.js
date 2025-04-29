@@ -58,18 +58,27 @@ const Dashboard = () => {
         Jumat: [], Sabtu: [], Minggu: [],
       };
 
-      res.data.forEach((order) => {
-        const day = new Date(order.tanggal_pesanan).toLocaleDateString("id-ID", { weekday: "long" });
-        const capDay = day.charAt(0).toUpperCase() + day.slice(1);
-        const name = productMap[order.nama_produk] || "Produk tidak ditemukan";
+      // Get start and end dates for current week view
+      const weekStart = currentWeekDates[0];
+      const weekEnd = currentWeekDates[6];
 
-        if (grouped[capDay]) {
-          grouped[capDay].push({
-            id: order._id,
-            name,
-            time: order.waktu_mulai_buat || "00:00",
-            fullData: { ...order, nama_produk: name, produk: name }
-          });
+      res.data.forEach((order) => {
+        const orderDate = new Date(order.tanggal_pesanan);
+        
+        // Only process orders within current week view
+        if (orderDate >= weekStart && orderDate <= weekEnd) {
+          const day = orderDate.toLocaleDateString("id-ID", { weekday: "long" });
+          const capDay = day.charAt(0).toUpperCase() + day.slice(1);
+          const name = productMap[order.nama_produk] || "Produk tidak ditemukan";
+
+          if (grouped[capDay]) {
+            grouped[capDay].push({
+              id: order._id,
+              name,
+              time: order.waktu_mulai_buat || "00:00",
+              fullData: { ...order, nama_produk: name, produk: name }
+            });
+          }
         }
       });
 
@@ -115,11 +124,11 @@ const Dashboard = () => {
     fetchProducts();
   }, [weekOffset]);
 
-  const renderDayCards = (dayNames) => (
+  const renderDayCards = (startIdx, endIdx) => (
     <div className="d-flex justify-content-center flex-wrap">
-      {dayNames.map((day, idx) => {
+      {daysOfWeek.slice(startIdx, endIdx).map((day, idx) => {
         const ordersToday = orders[day] || [];
-        const displayDate = currentWeekDates[idx].toLocaleDateString("id-ID");
+        const displayDate = currentWeekDates[startIdx + idx].toLocaleDateString("id-ID");
 
         return (
           <div key={day} className="card-day">
@@ -174,8 +183,8 @@ const Dashboard = () => {
       </div>
 
       {/* Schedule Grid */}
-      <div className="mb-4">{renderDayCards(["Senin", "Selasa", "Rabu", "Kamis"])}</div>
-      <div>{renderDayCards(["Jumat", "Sabtu", "Minggu"])}</div>
+      <div className="mb-4">{renderDayCards(0, 4)}</div>
+      <div>{renderDayCards(4, 7)}</div>
 
       {/* Modal */}
       {showModal && (
