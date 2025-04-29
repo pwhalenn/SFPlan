@@ -59,7 +59,7 @@ const LoginForm = ({ onSubmit }) => {
         style={{
           width: "100%",
           padding: "0.75rem",
-          backgroundColor: "e873b6", 
+          backgroundColor: "ff85cb", 
           color: "white",
           border: "none",
           borderRadius: "0.375rem",
