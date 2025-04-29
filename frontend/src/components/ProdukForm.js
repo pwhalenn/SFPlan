@@ -61,7 +61,26 @@ const ProdukForm = ({ onSubmit, initialProduk = null }) => {
         />
       </div>
 
-      <button type="submit" className="btn btn-success w-100">
+      <button
+        type="submit"
+        className="w-100"
+        style={{
+          backgroundColor: "#ff85cb",
+          border: "1px solid #ff85cb",
+          color: "white",
+          padding: "0.5rem",
+          borderRadius: "0.375rem",
+          transition: "background-color 0.2s ease"
+        }}
+        onMouseOver={(e) => {
+          e.target.style.backgroundColor = "#e873b6";
+          e.target.style.borderColor = "#e873b6";
+        }}
+        onMouseOut={(e) => {
+          e.target.style.backgroundColor = "#ff85cb";
+          e.target.style.borderColor = "#ff85cb";
+        }}
+      >
         {initialProduk ? "Update Produk" : "Tambah Produk"}
       </button>
     </form>
