@@ -12,11 +12,7 @@ const RegisterForm = () => {
     try {
       await registerUser({ username, password });
       navigate("/login");
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Gagal register. Username mungkin sudah digunakan.";
-      alert(errorMessage);
-    }
+    } catch (error) {    }
   };
 
   return (

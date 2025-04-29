@@ -119,6 +119,19 @@ const Dashboard = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus pesanan ini?")) {
+      try {
+        await axios.delete(`/pesanan/${id}`);
+        setShowModal(false);
+        setSelectedPesanan(null);
+        fetchOrders();
+      } catch (err) {
+        console.error("Gagal menghapus pesanan:", err);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchOrders();
     fetchProducts();
@@ -192,7 +205,15 @@ const Dashboard = () => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Edit Pesanan</h5>
+                <div className="d-flex align-items-center gap-3">
+                  <h5 className="modal-title mb-0">Edit Pesanan</h5>
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => handleDelete(selectedPesanan._id)}
+                  >
+                    Hapus
+                  </button>
+                </div>
                 <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
               </div>
               <div className="modal-body">
