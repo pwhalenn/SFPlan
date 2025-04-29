@@ -12,7 +12,9 @@ const RegisterForm = () => {
     try {
       await registerUser({ username, password });
       navigate("/login");
-    } catch (error) {    }
+    } catch (error) {  
+        alert("Gagal melakukan registrasi. Silakan coba lagi.");
+      }
   };
 
   return (
