@@ -1,38 +1,88 @@
-.App {
+/* Base styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f6fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* Card container for each day */
+.card-day {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px;
+  min-height: 300px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+  width: 280px;
+}
+
+.card-day:hover {
+  transform: translateY(-2px);
+}
+
+/* Title for each day card */
+.card-title {
+  font-weight: 600;
   text-align: center;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Individual order items - now soft pink */
+.order-item {
+  background-color: #ffe6f1;
+  border-left: 4px solid #ff85cb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.order-item:hover {
+  background-color: #ffd1e8;
+  transform: scale(1.02);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* If there are no orders */
+.no-orders {
+  color: #95a5a6;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Modal backdrop override (optional enhancement) */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Custom pink filled button */
+.btn-pink {
+  background-color: #ff85cb;
+  color: white;
+  border: none;
+  font-weight: bold !important;
+  transition: background-color 0.2s ease;
+}
+
+.btn-outline-pink {
+  border: 1px solid #ff85cb;
+  color: #ff85cb;
+  background-color: transparent;
+  font-weight: bold !important;
+  transition: all 0.2s ease;
+}
+
+.btn-pink:hover {
+  background-color: #e873b6;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn-outline-pink:hover {
+  background-color: #ffe6f1;
+  color: #e873b6;
 }
