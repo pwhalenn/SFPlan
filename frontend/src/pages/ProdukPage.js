@@ -78,7 +78,22 @@ const ProdukPage = () => {
       <div className="d-flex flex-column gap-4">
         <div className="d-flex justify-content-between align-items-center">
           <h2>Manajemen Produk</h2>
-          <Button variant="primary" onClick={handleShowModal}>
+          <Button
+            onClick={handleShowModal}
+            style={{
+              backgroundColor: "#ff85cb",
+              borderColor: "#ff85cb",
+              color: "#fff"
+            }}
+            onMouseOver={(e) => {
+              e.target.style.backgroundColor = "#e873b6";
+              e.target.style.borderColor = "#e873b6";
+            }}
+            onMouseOut={(e) => {
+              e.target.style.backgroundColor = "#ff85cb";
+              e.target.style.borderColor = "#ff85cb";
+            }}
+          >
             Tambah Produk
           </Button>
         </div>
