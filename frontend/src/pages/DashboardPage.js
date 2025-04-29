@@ -51,18 +51,15 @@ const Dashboard = () => {
 
   const fetchOrders = async () => {
     try {
-      // Fetch products first
       const productsRes = await axios.get("/produk");
       const productsData = productsRes.data;
       
-      // Create product map with debugging
       const productMap = {};
       productsData.forEach(product => {
         productMap[product._id] = product.nama_produk;
         console.log(`Adding product: ID=${product._id}, Name=${product.nama_produk}`);
       });
 
-      // Fetch orders
       const res = await axios.get("/pesanan");
       const fetchedOrders = res.data;
       
@@ -72,10 +69,8 @@ const Dashboard = () => {
       };
 
       fetchedOrders.forEach((order) => {
-        // Log the entire order object
         console.log("Full order data:", order);
 
-        // Try to get product ID - log each attempt
         const productId = order.nama_produk;
         console.log("Looking for product with ID:", productId);
         console.log("Available product IDs:", Object.keys(productMap));
@@ -84,8 +79,7 @@ const Dashboard = () => {
           .toLocaleDateString("id-ID", { weekday: "long" });
         const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
         
-        // Get product name
-        const productName = order.nama_produk; // Use nama_produk directly
+        const productName = productMap[order.nama_produk];
         
         if (groupedOrders[capitalizedDay]) {
           groupedOrders[capitalizedDay].push({
@@ -95,7 +89,7 @@ const Dashboard = () => {
             fullData: {
               ...order,
               nama_produk: productName,
-              produk: productName, // Use nama_produk as produk
+              produk: productName,
             },
           });
         }
